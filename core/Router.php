@@ -9,6 +9,11 @@ class Router
         $this->routes['get'][$this->normalize($uri)]=$controller;
     }
 
+    public function post($uri, $controller)
+{
+    $this->routes['post'][$this->normalize($uri)] = $controller;
+}
+
     protected function normalize($uri){
         return '/'.trim($uri, '/');
     }
