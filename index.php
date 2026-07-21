@@ -1,30 +1,15 @@
 <?php
-include "db.php";
 
-$result = $conn->query("SELECT * FROM notes ORDER BY id DESC");
-?>
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Notes App</title>
-        <link rel="stylesheet" href="styles.css">
-    </head>
-    <body  class="index-body">
-        <div class="index-top-bar">
-            <h2>All Notes</h2>
-            <a href="add.php" class="add-btn">+</a>
-        </div>
-        <div class="notes-container">
-            <?php while($row = $result ->fetch_assoc()){ ?>
+define('BASE_PATH', __DIR__);
+require BASE_PATH . '/helpers.php';
 
-            <a href="view.php?id=<?php echo $row['id'];?>" class="note-card">
-                <h3><?php echo $row['title'];?></h3>
-                <p><?php echo substr($row['content'], 0,50); ?>...</p>
-            </a>
-            <?php
-            }?>
+require base_path('core/Router.php');
+$router = require base_path('routes.php');
 
-        </div>
-    </body>
+$basePath = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
+$uri = $_SERVER['REQUEST_URI'];
+if ($basePath && strpos($uri, $basePath) === 0) {
+    $uri = substr($uri, strlen($basePath));
+}
 
-</html>
+$router->route($uri, $_SERVER['REQUEST_METHOD']);
