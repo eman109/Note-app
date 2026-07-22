@@ -10,26 +10,43 @@ class Router
     }
 
     public function post($uri, $controller)
-{
-    $this->routes['post'][$this->normalize($uri)] = $controller;
-}
+    {
+        $this->routes['post'][$this->normalize($uri)] = $controller;
+    }
+
+    public function patch($uri, $controller)
+    {
+        $this->routes['patch'][$this->normalize($uri)] = $controller;
+    }
+
+    public function delete($uri, $controller)
+    {
+        $this->routes['delete'][$this->normalize($uri)] = $controller;
+    }
 
     protected function normalize($uri){
         return '/'.trim($uri, '/');
     }
 
 
-    public function route($uri, $method){
-        $uri= $this->normalize(parse_url($uri, PHP_URL_PATH));
-        $method=strtolower($method);
+   public function route($uri, $method)
+    {
+        $uri    = $this->normalize(parse_url($uri, PHP_URL_PATH));
+        $method = strtolower($method);
 
-        foreach($this->routes[$method] ?? [] as $route => $controller){
-            if($route === $uri){
+        foreach ($this->routes[$method] ?? [] as $route => $controller) {
+            $pattern = preg_replace('#\{[a-zA-Z]+\}#', '([^/]+)', $route);
+            $pattern = '#^' . $pattern . '$#';
+
+            if (preg_match($pattern, $uri, $matches)) {
+                array_shift($matches);
+                $params = $matches;
                 return require base_path($controller);
             }
-
         }
+
         echo "404 - not found";
     }
+    
 
 }

@@ -16,4 +16,5 @@ if (BASE_URL && strpos($uri, BASE_URL) === 0) {
     $uri = substr($uri, strlen(BASE_URL));
 }
 
-$router->route($uri, $_SERVER['REQUEST_METHOD']);
+$method = $_POST['_method'] ?? $_SERVER['REQUEST_METHOD'];
+$router->route($uri, $method);

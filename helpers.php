@@ -19,3 +19,10 @@ function view($path, $data = [])
     extract($data);
     require base_path('views/' . $path);
 }
+
+function require_login()
+{
+    if (empty($_SESSION['user_id'])) {
+        redirect(url('login'));
+    }
+}
