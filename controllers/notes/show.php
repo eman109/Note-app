@@ -10,7 +10,8 @@ $stmt->execute(['id' => $id, 'user_id' => $_SESSION['user_id']]);
 $note = $stmt->fetch();
 
 if (!$note) {
-    echo "404 - not found";
+    http_response_code(404);
+    view('404.view.php');
     exit();
 }
 

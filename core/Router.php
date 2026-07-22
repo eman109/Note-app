@@ -45,7 +45,8 @@ class Router
             }
         }
 
-        echo "404 - not found";
+        http_response_code(404);
+        view('404.view.php');
     }
     
 
